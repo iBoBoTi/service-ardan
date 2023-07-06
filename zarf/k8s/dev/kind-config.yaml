@@ -1,0 +1,4 @@
+kind: Cluster
+apiVeersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
