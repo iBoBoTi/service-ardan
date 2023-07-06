@@ -152,10 +152,10 @@ LOKI            := grafana/loki:2.8.2
 PROMTAIL        := grafana/promtail:2.8.2
 TELEPRESENCE    := datawire/ambassador-telepresence-manager:2.14.0
 
-KIND_CLUSTER    := ardan-starter-cluster
+KIND_CLUSTER    := boboti-starter-cluster
 NAMESPACE       := sales-system
 APP             := sales
-BASE_IMAGE_NAME := ardanlabs/service
+BASE_IMAGE_NAME := boboti/ardan/service
 SERVICE_NAME    := sales-api
 VERSION         := 0.0.1
 SERVICE_IMAGE   := $(BASE_IMAGE_NAME)/$(SERVICE_NAME):$(VERSION)
@@ -204,11 +204,11 @@ dev-docker:
 # ==============================================================================
 # Building containers
 
-all: service metrics
+all: sales
 
-service:
+sales:
 	docker build \
-		-f zarf/docker/dockerfile.service \
+		-f zarf/docker/dockerfile.sales-api \
 		-t $(SERVICE_IMAGE) \
 		--build-arg BUILD_REF=$(VERSION) \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
