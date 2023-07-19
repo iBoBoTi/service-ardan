@@ -29,6 +29,11 @@ VERSION         := 0.0.1
 SERVICE_IMAGE   := $(BASE_IMAGE_NAME)/$(SERVICE_NAME):$(VERSION)
 METRICS_IMAGE   := $(BASE_IMAGE_NAME)/$(SERVICE_NAME)-metrics:$(VERSION)
 
+run:
+	go run app/services/sales-api/main.go | go run app/tooling/logfmt/main.go
+
+run-help:
+	go run app/services/sales-api/main.go --help
 # ==============================================================================
 # Building containers
 
@@ -69,7 +74,7 @@ dev-restart:
 	kubectl rollout restart deployment $(APP) --namespace=$(NAMESPACE)
 
 dev-logs:
-	kubectl logs --namespace=$(NAMESPACE) -l app=$(APP) --all-containers=true -f --tail=100 --max-log-requests=6
+	kubectl logs --namespace=$(NAMESPACE) -l app=$(APP) --all-containers=true -f --tail=100 --max-log-requests=6 | go run app/tooling/logfmt/main.go -service=$(SERVICE_NAME)
 
 dev-describe:
 	kubectl describe nodes
