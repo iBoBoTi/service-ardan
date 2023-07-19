@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/iBoBoTi/service-ardan/foundation/logger"
+	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 )
 
@@ -31,6 +32,10 @@ func main(){
 func run(log *zap.SugaredLogger) error{
 	// ===========================================================================================
 	// GOMAXPROCS
+	opts := maxprocs.Logger(log.Infof)
+	if _, err := maxprocs.Set(opts); err != nil {
+		return fmt.Errorf("maxprocs: %w", err)
+	}
 	log.Infow("startup", "GOMAXPROCS", runtime.GOMAXPROCS(0))
 	defer log.Infow("shutdown")
 
