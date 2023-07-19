@@ -85,3 +85,8 @@ dev-describe-sales:
 dev-update: all dev-load dev-restart  # when you update the source code of the image
 
 dev-update-apply: all dev-load dev-apply # when you update the configuration of the cluster
+
+tidy:
+	rm -rf vendor
+	go mod tidy
+	go mod vendor
