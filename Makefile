@@ -69,7 +69,7 @@ dev-restart:
 	kubectl rollout restart deployment $(APP) --namespace=$(NAMESPACE)
 
 dev-logs:
-	kubectl logs --namespace=$(NAMESPACE) -l app=$(APP) --all-containers=true -f --tail=100 --max-log-requests=6 | go run app/tooling/logfmt/main.go -service=$(SERVICE_NAME)
+	kubectl logs --namespace=$(NAMESPACE) -l app=$(APP) --all-containers=true -f --tail=100 --max-log-requests=6
 
 dev-describe:
 	kubectl describe nodes
@@ -78,5 +78,10 @@ dev-describe:
 dev-describe-deployment:
 	kubectl describe deployment --namespace=$(NAMESPACE) $(APP)
 
+# describe the pod
 dev-describe-sales:
 	kubectl describe pod --namespace=$(NAMESPACE) -l app=$(APP)
+
+dev-update: all dev-load dev-restart  # when you update the source code of the image
+
+dev-update-apply: all dev-load dev-apply # when you update the configuration of the cluster

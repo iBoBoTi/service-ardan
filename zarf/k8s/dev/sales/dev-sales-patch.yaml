@@ -17,3 +17,10 @@ spec:
     spec:
       dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
+      containers:
+      - name: sales-api
+        resources:
+          limits:
+            cpu: "2000m" # up to 2 full cores
+          requests:
+            cpu: "1000m" # use to 1 full core
