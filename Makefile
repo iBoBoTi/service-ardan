@@ -2,8 +2,8 @@
 SHELL_PATH = /bin/ash
 SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 
-# http://sales-service.sales-system.svc.cluster.local:4000/debug/pprof/
 
+# http://sales-service.sales-system.svc.cluster.local:4000/debug/pprof/
 # Kind
 # 	For full Kind v0.20 release notes: https://github.com/kubernetes-sigs/kind/releases/tag/v0.20.0
 
@@ -52,7 +52,8 @@ sales:
 # ==============================================================================
 # Running from within k8s/kind
 
-dev-up-local:
+# sets up cluster and loads telepresence
+dev-kind:
 	kind create cluster \
 		--image $(KIND) \
 		--name $(KIND_CLUSTER) \
@@ -60,13 +61,14 @@ dev-up-local:
 
 	kubectl wait --timeout=120s --namespace=local-path-storage --for=condition=Available deployment/local-path-provisioner
 
-dev-up: dev-up-local
+	kind load docker-image $(TELEPRESENCE) --name $(KIND_CLUSTER)
+
 	telepresence --context=kind-$(KIND_CLUSTER) helm install
+
+dev-up: dev-kind
 	telepresence --context=kind-$(KIND_CLUSTER) connect
 
-dev-down-local:
-	kind delete cluster --name $(KIND_CLUSTER)
-
+# quits telepresence and deletes cluster
 dev-down:
 	telepresence quit -s
 	kind delete cluster --name $(KIND_CLUSTER)
@@ -76,6 +78,7 @@ dev-status:
 	kubectl get svc -o wide
 	kubectl get pods -o wide --watch --all-namespaces
 
+# loads service image into the cluster
 dev-load:
 	kind load docker-image $(SERVICE_IMAGE) --name $(KIND_CLUSTER)
 
@@ -113,6 +116,9 @@ metrics-view:
 dev-tel:
 	kind load docker-image $(TELEPRESENCE) --name $(KIND_CLUSTER)
 	telepresence --context=kind-$(KIND_CLUSTER) helm install
+	telepresence --context=kind-$(KIND_CLUSTER) connect
+
+dev-tel-connect:
 	telepresence --context=kind-$(KIND_CLUSTER) connect
 
 tidy:
