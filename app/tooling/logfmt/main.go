@@ -34,10 +34,10 @@ func main(){
 		}
 
 		// if service filter was provided, check.
-		if service != "" && m["service"] != service {
+		if service != "" && m["service"] != strings.ToUpper(service) {
 			continue
 		}
-
+		
 		// having trace-id present in the logs.
 		traceID := "00000000-0000-0000-0000-000000000000"
 		if v, ok := m["trace_id"]; ok {

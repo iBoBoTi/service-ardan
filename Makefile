@@ -36,6 +36,9 @@ run:
 
 run-help:
 	go run app/services/sales-api/main.go --help
+
+status:
+	curl -il http://sales-service.sales-system.svc.cluster.local:3000/status
 # ==============================================================================
 # Building containers
 
