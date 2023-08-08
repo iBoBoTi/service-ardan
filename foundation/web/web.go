@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"os"
 	"syscall"
+	"time"
 
 	"github.com/dimfeld/httptreemux/v5"
+	"github.com/google/uuid"
 
 )
 
@@ -61,12 +63,12 @@ func (a *App) Handle(method string, group string, path string, handler Handler, 
 
 		// span := trace.SpanFromContext(ctx)
 
-		// v := Values{
-		// 	TraceID: span.SpanContext().TraceID().String(),
-		// 	Tracer:  a.tracer,
-		// 	Now:     time.Now().UTC(),
-		// }
-		// ctx = context.WithValue(ctx, key, &v)
+		v := Values{
+			TraceID: uuid.NewString(),
+			// Tracer:  a.tracer,
+			Now:     time.Now().UTC(),
+		}
+		ctx = context.WithValue(ctx, key, &v)
 
 		if err := handler(ctx, w, r); err != nil {
 			// if validateShutdown(err) {

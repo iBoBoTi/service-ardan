@@ -2,8 +2,9 @@ package testgrp
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
+
+	"github.com/iBoBoTi/service-ardan/foundation/web"
 )
 
 // HealthCheck represents the a test handler to health check the api service
@@ -13,5 +14,5 @@ func HealthCheck (ctx context.Context,wr http.ResponseWriter, req *http.Request)
 	}{
 		Status: "OK",
 	}
-	return json.NewEncoder(wr).Encode(status)
+	return web.Respond(ctx, wr, status, http.StatusOK)
 }
